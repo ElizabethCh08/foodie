@@ -1,4 +1,12 @@
+import 'dart:convert';
+
+import 'package:flutter_diet2/model/bodyfat.dart';
+import 'package:flutter_diet2/model/imc.dart';
+import 'package:flutter_diet2/model/mass.dart';
 import 'package:flutter_diet2/model/user.dart';
+import 'package:flutter_diet2/model/visceralfat.dart';
+import 'package:flutter_diet2/model/waist.dart';
+import 'package:flutter_diet2/model/weight.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
@@ -20,13 +28,24 @@ class UserSheetsApi {
   static final _spreadsheetId = '1fdOiHPwDqLEJW6SRVWLYX4RT-htizfPQxnf7Q-IaHo8';
   static final _gsheets = GSheets(_credentials);
   static Worksheet? _userSheet;
-static Worksheet? _userSheetWeight;
+  static Worksheet? _userSheetWeight;
+  static Worksheet? _userSheetWaist;
+  static Worksheet? _userSheetMass;
+  static Worksheet? _userSheetBodyfat;
+  static Worksheet? _userSheetVisceralfat;
+  static Worksheet? _userSheetImc;
 
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
       _userSheet = await _getWorkSheet(spreadsheet, title: 'Users');
       _userSheetWeight = await _getWorkSheet(spreadsheet, title: 'Weight');
+      _userSheetWaist = await _getWorkSheet(spreadsheet, title: 'WaistCircumference');
+      _userSheetMass = await _getWorkSheet(spreadsheet, title: 'MuscularMass');
+      _userSheetBodyfat = await _getWorkSheet(spreadsheet, title: 'Bodyfat');
+      _userSheetVisceralfat = await _getWorkSheet(spreadsheet, title: 'Visceralfat');
+      _userSheetImc = await _getWorkSheet(spreadsheet, title: 'IMC');
+
 
       final firstRow = UserFields.getFields();
       _userSheet!.values.insertRow(1, firstRow);
@@ -46,6 +65,8 @@ static Worksheet? _userSheetWeight;
     }
   }
 
+  //User spreadsheet
+
   static Future<int> getRowCount() async {
     if (_userSheet == null) return 0;
 
@@ -54,7 +75,7 @@ static Worksheet? _userSheetWeight;
     return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
   }
 
-  static Future<List<User>> getAll() async{
+  static Future<List<User>> getAll() async {
     if (_userSheet == null) return <User>[];
 
     final users = await _userSheet!.values.map.allRows();
@@ -63,17 +84,150 @@ static Worksheet? _userSheetWeight;
 
   static Future<User?> getById(String id) async {
     if (_userSheet == null) return null;
-      final json = await _userSheet!.values.map.rowByKey(id, fromColumn: 1);
-      return json == null ? null : User.fromJson(json);
+
+    final json = await _userSheet!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : User.fromJson(json);
   }
 
-  /*static Future<Weight?> getWeightById(String id) async {
-    if (_userSheetWeight == null) return null;
-      final json = await _userSheetWeight!.values.map.rowByKey(id, fromColumn: 1);
-      return json == null ? null : Weight.fromJson(json);
+  //Weight spreadsheet
+
+  static Future<int> getRowCountWeight() async {
+    if (_userSheetWeight == null) return 0;
+
+    final lastRow = await _userSheetWeight!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
   }
-*/
+
+  static Future<List<Weight>> getAllWeight() async {
+    if (_userSheetWeight == null) return <Weight>[];
+
+    final weights = await _userSheetWeight!.values.map.allRows();
+    return weights == null ? <Weight>[] : weights.map(Weight.fromJson).toList();
+  }
+
+  static Future<Weight?> getWeightById(String id) async {
+    if (_userSheetWeight == null) return null;
+
+    final json = await _userSheetWeight!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Weight.fromJson(json);
+  }
+
+  //Waist spreadsheet
+
+  static Future<int> getRowCountWaist() async {
+    if (_userSheetWaist == null) return 0;
+
+    final lastRow = await _userSheetWaist!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Waist>> getAllWaist() async {
+    if (_userSheetWaist == null) return <Waist>[];
+
+    final waists = await _userSheetWaist!.values.map.allRows();
+    return waists == null ? <Waist>[] : waists.map(Waist.fromJson).toList();
+  }
+
+  static Future<Waist?> getWaistById(String id) async {
+    if (_userSheetWaist == null) return null;
+
+    final json = await _userSheetWaist!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Waist.fromJson(json);
+  }
+
+  // Mass spreadsheet
+
+  static Future<int> getRowCountMass() async{
+    if (_userSheetMass == null) return 0;
+
+    final lastRow = await _userSheetMass!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Mass>> getAllMass() async{
+    if (_userSheetMass == null) return <Mass>[];
+
+    final masses = await _userSheetMass!.values.map.allRows();
+    return masses == null ? <Mass>[] : masses.map(Mass.fromJson).toList();
+
+  }
+
+  static Future<Mass?> getMassById(String id) async{
+    if (_userSheetMass == null) return null;
+
+    final json = await _userSheetMass!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Mass.fromJson(json);
+  }
+
+  // Body_fat Spreadsheet
   
+  static Future<int> getRowCountBodyfat() async{
+    if(_userSheetBodyfat == null) return 0;
+
+    final lastRow = await _userSheetBodyfat!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Bodyfat>> getAllBodyfat() async{
+    if(_userSheetBodyfat == null) return <Bodyfat>[];
+
+    final bodies = await _userSheetBodyfat!.values.map.allRows();
+    return bodies == null ? <Bodyfat>[] : bodies.map(Bodyfat.fromJson).toList();
+  }
+
+  static Future<Bodyfat?> getBodyfatById(String id) async{
+    if(_userSheetBodyfat == null) return null;
+
+    final json = await _userSheetBodyfat!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Bodyfat.fromJson(json);
+  }
+
+  // Visceral_fat Spreadsheet
+
+  static Future<int> getRowCountVisceralfat() async{
+    if(_userSheetVisceralfat == null) return 0;
+
+    final lastRow = await _userSheetVisceralfat!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Visceralfat>> getAllVisceralfat() async{
+    if(_userSheetVisceralfat == null) return <Visceralfat>[];
+
+    final visceralfats = await _userSheetVisceralfat!.values.map.allRows();
+    return visceralfats == null ? <Visceralfat>[] : visceralfats.map(Visceralfat.fromJson).toList();    
+  }
+
+  static Future<Visceralfat?> getVisceralfatById(String id)async{
+    if(_userSheetVisceralfat == null) return null;
+
+    final json = await _userSheetVisceralfat!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Visceralfat.fromJson(json);
+  }
+
+  //IMC
+
+  static Future<int> getRowCountImc() async{
+    if(_userSheetImc == null) return 0;
+
+    final lastRow = await _userSheetImc!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Imc>> getAllImc() async{
+    if(_userSheetImc == null) return <Imc>[];
+
+    final imcs = await _userSheetImc!.values.map.allRows();
+    return imcs == null ? <Imc>[] : imcs.map(Imc.fromJson).toList();
+  }
+
+  static Future<Imc?> getImcById(String id)async{
+    if(_userSheetImc == null) return null;
+
+    final json = await _userSheetImc!.values.map.rowByKey(id, fromColumn: 1);
+    return json == null ? null : Imc.fromJson(json);
+  }
+
 
   static Future insert(List<Map<String, dynamic>> rowList) async {
     if (_userSheet == null) return;

@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_diet2/pages/details_screen.dart';
-
 class UserFields{
   static final String email = 'email';
   static final String id = 'id';

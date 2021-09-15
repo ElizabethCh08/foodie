@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_diet2/api/user_sheets_api.dart';
+import 'package:flutter_diet2/model/bodyfat.dart';
+import 'package:flutter_diet2/model/imc.dart';
+import 'package:flutter_diet2/model/mass.dart';
 import 'package:flutter_diet2/model/user.dart';
+import 'package:flutter_diet2/model/visceralfat.dart';
+import 'package:flutter_diet2/model/waist.dart';
+import 'package:flutter_diet2/model/weight.dart';
 import 'package:flutter_diet2/pages/home_screen.dart';
 import 'package:flutter_diet2/widgets/user_form_widget.dart';
 
@@ -11,6 +17,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   User? user;
+  Weight? weight;
+  Waist? waist;
+  Mass? mass;
+  Bodyfat? bodyfat;
+  Visceralfat? visceralfat;
+  Imc? imc;
   String? msgError;
 
   @override
@@ -45,16 +57,37 @@ class _LoginScreenState extends State<LoginScreen> {
                   onFindByUserID: (userStr) async {
 
                     final encontrado = await UserSheetsApi.getById(userStr.email);
+                    final pesoRecuperado = await UserSheetsApi.getWeightById(userStr.email);
+                    final cinturaRecuperado = await UserSheetsApi.getWaistById(userStr.email);
+                    final masaRecuperado = await UserSheetsApi.getMassById(userStr.email);
+                    final grasaRecuperado = await UserSheetsApi.getBodyfatById(userStr.email);
+                    final visceralRecuperado = await UserSheetsApi.getVisceralfatById(userStr.email);
+                    final imcRecuperado = await UserSheetsApi.getImcById(userStr.email);
                     print (encontrado);
                     if(encontrado?.password == userStr.password){
                       setState(() {
                         this.user = encontrado;
+                        this.weight = pesoRecuperado;
+                        this.waist = cinturaRecuperado;
+                        this.mass = masaRecuperado;
+                        this.bodyfat = grasaRecuperado;
+                        this.visceralfat = visceralRecuperado;
+                        this.imc = imcRecuperado;
                       });
                       print ("entro bien");
-                      //llamarPantallaInicio();
+                      //llamarPantallaInicio;
                        Navigator.push(context,
-                     MaterialPageRoute(builder: (context)=>HomeScreen(user: encontrado)),
+                     MaterialPageRoute(builder: (context)=>HomeScreensw(
+                       user: encontrado, 
+                       peso: pesoRecuperado, 
+                       cintura: cinturaRecuperado,
+                       masa: masaRecuperado,
+                       grasaCorporal: grasaRecuperado,
+                       grasaVisceral: visceralRecuperado,
+                       imc: imcRecuperado,
+                       )),
                    );
+                   print(pesoRecuperado);
                     }else{
                       print ("no debe entrar");
                       setState(() {
@@ -64,12 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   },
                 ),
-                //if(users.isNotEmpty) buildUserControls(),
               ],
             ),
           ),
         ),
     );
   }
-  //Widget llamarPantallaInicio() => HomeScreen(usuarioEncontrado.name);
 }

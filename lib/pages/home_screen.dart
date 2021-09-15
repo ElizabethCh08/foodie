@@ -1,7 +1,15 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_diet2/api/user_sheets_api.dart';
+import 'package:flutter_diet2/model/bodyfat.dart';
+import 'package:flutter_diet2/model/imc.dart';
+import 'package:flutter_diet2/model/mass.dart';
 import 'package:flutter_diet2/model/user.dart';
+import 'package:flutter_diet2/model/visceralfat.dart';
+import 'package:flutter_diet2/model/waist.dart';
+import 'package:flutter_diet2/model/weight.dart';
 import 'details_screen.dart';
 import 'package:intl/intl.dart';
 import 'meal_screen.dart';
@@ -9,32 +17,28 @@ import 'nutritional_screen.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:group_button/group_button.dart';
 
-class HomeScreen extends StatelessWidget {
+
+
+class HomeScreensw extends StatelessWidget {
   final User? user;
-  /*
-  final Weigth peso;
-  final Heigth estatura;
-  final Waist medidaCintura;
-  final Mass masaMuscular;
-     
- @override
-  void initState() {
-    super.initState();
+  final Weight? peso;
+  final Waist? cintura;
+  final Mass? masa;
+  final Bodyfat? grasaCorporal;
+  final Visceralfat? grasaVisceral;
+  final Imc? imc;
+      
 
-    initWeigth();
-    initHeigth();
-  }
-
-  void initWeigth() {
-      Weigth pesoRecuperado = async UserSheetsApi.getWeightById(user.email);
-    }
-   void initHeigth() {
-    
-    } 
-
-  */
-
-  HomeScreen({Key? key, required this.user}) : super(key: key);
+  HomeScreensw({
+    Key? key, 
+    required this.user, 
+    required this.peso, 
+    required this.cintura, 
+    required this.masa,
+    required this.grasaCorporal,
+    required this.grasaVisceral,
+    required this.imc,
+    }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,13 @@ class HomeScreen extends StatelessWidget {
     final widht = MediaQuery.of(context).size.width;
     final today = DateTime.now();
     final name = user == null ? '' : user!.name;
+    final weight = peso == null ? '' : peso!.value;
+    final waist = cintura == null ? '' : cintura!.value;
+    final mass = masa == null ? '' : masa!.value;
+    final bFat = grasaCorporal == null ? '' : grasaCorporal!.value;
+    final vFat = grasaVisceral == null ? '' : grasaVisceral!.value;
+    final bmi = imc == null ? '' : imc!.value;
+    
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -104,7 +115,7 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 color: Color(0xFFFFFFFF),
                 padding: const EdgeInsets.only(
-                    top: 50, left: 32, right: 16, bottom: 0),
+                    top: 50, left: 16,  bottom: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -118,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     ListTile(
                       title: Text(
-                        "Lunes, 06 Septiembre",
+                        "Martes, 14 Septiembre",
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 18,
@@ -138,17 +149,13 @@ class HomeScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          width: 0,
-                        ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
                             _Progress(
                               ingredient: "Peso",
-                              leftAmount: 72,
+                              leftAmount: '$weight kg',
                               progress: 0.5,
                               progressColor: Color(0xFFFD3000),
                               width: widht * 0.30,
@@ -157,8 +164,8 @@ class HomeScreen extends StatelessWidget {
                               height: 10,
                             ),
                             _Progress(
-                              ingredient: "Masa",
-                              leftAmount: 32,
+                              ingredient: "M. muscular",
+                              leftAmount: '$mass %',
                               progress: 0.2,
                               progressColor: Color(0xFF5FD000),
                               width: widht * 0.30,
@@ -168,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             _Progress(
                               ingredient: "IMC",
-                              leftAmount: 25,
+                              leftAmount: '$bmi',
                               progress: 0.4,
                               progressColor: Color(0xFFFDE400),
                               width: widht * 0.30,
@@ -187,7 +194,7 @@ class HomeScreen extends StatelessWidget {
                           children: <Widget>[
                             _Progress(
                               ingredient: "Grasa c.",
-                              leftAmount: 23,
+                              leftAmount: '$bFat %',
                               progress: 0.1,
                               progressColor: Color(0xFFFD3000),
                               width: widht * 0.30,
@@ -197,7 +204,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             _Progress(
                               ingredient: "Abdomen",
-                              leftAmount: 40,
+                              leftAmount: '$waist cm',
                               progress: 0.6,
                               progressColor: Color(0xFFFD3000),
                               width: widht * 0.30,
@@ -207,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             _Progress(
                               ingredient: "Grasa v.",
-                              leftAmount: 9,
+                              leftAmount: '$vFat',
                               progress: 0.8,
                               progressColor: Color(0xFF5FD000),
                               width: widht * 0.30,
@@ -552,7 +559,7 @@ class HomeScreen extends StatelessWidget {
 
 class _Progress extends StatelessWidget {
   final String ingredient;
-  final int leftAmount;
+  final String leftAmount;
   final double progress, width;
   final Color progressColor;
 
@@ -573,8 +580,8 @@ class _Progress extends StatelessWidget {
         Text(
           ingredient.toUpperCase(),
           style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
           ),
         ),
         Row(
@@ -602,9 +609,9 @@ class _Progress extends StatelessWidget {
               ],
             ),
             SizedBox(
-              width: 18,
+              width: 10,
             ),
-            Text("${leftAmount}"),
+            Text("$leftAmount"),
           ],
         ),
       ],

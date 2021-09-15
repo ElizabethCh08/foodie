@@ -106,7 +106,7 @@ class _UserFormWidgetState extends State<UserFormWidget> {
                     openWhatsApp();
                   },
                   child: const Text(
-                    'Olvide mi contraseña',
+                    'Olvidé mi contraseña',
                     style: TextStyle(
                       color: Colors.white70,
                       fontStyle: FontStyle.italic,
@@ -154,6 +154,9 @@ class _UserFormWidgetState extends State<UserFormWidget> {
       );
 
   Widget buildPassword() => TextFormField(
+    obscureText: true,
+    enableSuggestions: false,
+    autocorrect: false,
         controller: controllerPassword,
         decoration: InputDecoration(
           labelText: 'Contraseña',
