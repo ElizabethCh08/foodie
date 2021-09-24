@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_diet2/model/weight.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
@@ -8,6 +9,12 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 
 class DetailScreen extends StatelessWidget{
+  /*final Weight? peso;
+
+  DetailScreen({
+    Key? key, 
+    required this.peso,
+  })*/
 
   @override
   Widget build(BuildContext context){
@@ -64,15 +71,17 @@ class SalesData {
 
 Widget _createCard1(){
 
+
   final List<SalesData> charData = [
-    SalesData('Ene', 3),
-    SalesData('Feb', 5),
-    SalesData('Mar', 7),
-    SalesData('Abr', 12),
-    SalesData('May', 20),
+    /*SalesData('2021-09-13', 64),
+    SalesData('2021-10-15', 54),
+    SalesData('2021-11-17', 44),
+    SalesData('2021-11-21', 34),*/
+    SalesData('2021-09-11', 70),
+    /*SalesData('May', null),
     SalesData('Jun', null),
     SalesData('Jul', null),
-    SalesData('Ago', null),
+    SalesData('Ago', null),*/
   ];
 
   final LinearGradient gradientColors =
@@ -105,6 +114,7 @@ Widget _createCard1(){
             padding: EdgeInsets.all(1.0),
             child: new SfCartesianChart(
                 primaryXAxis: CategoryAxis(
+                  labelRotation: 90,
                     labelStyle: TextStyle(
                         color: Color (0xFFF35F34),
                         fontSize: 10,
@@ -116,14 +126,14 @@ Widget _createCard1(){
                   isVisible: false,
                     plotBands: <PlotBand>[
                       PlotBand(
-                          start: 15,
-                          end: 15,
+                          start: 44,
+                          end: 44,
                           borderColor: Colors.red,
                           borderWidth: 2
                       ),
                       PlotBand(
-                          start: 5,
-                          end: 5,
+                          start: 34,
+                          end: 34,
                           borderColor: Colors.green,
                           borderWidth: 2
                       ),
