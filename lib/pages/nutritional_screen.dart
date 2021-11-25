@@ -63,10 +63,10 @@ class NutritionalScreen extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 15, right: 15),
                       child: Text(
-                          'Masticar 20 veces cada comida. \n'
-                              'Cambiar azúcar blanca por edulcorante tipo dulce gota'
-                              ' (1 gota equivale a una cdta de azúcar blanca). \n'
-                              'Tomar 2 lts diarios de agua. \n',
+                          'Masticar 20 veces cada bocado. \n',
+                              //'Cambiar azúcar blanca por edulcorante tipo dulce gota'
+                              //' (1 gota equivale a una cdta de azúcar blanca). \n'
+                              //'Tomar 2 lts diarios de agua. \n',
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                             height: 1.8,
@@ -105,10 +105,10 @@ class NutritionalScreen extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 15, right: 15),
                       child: Text(
-                        'Masticar 20 veces cada comida. \n'
-                            'Cambiar azúcar blanca por edulcorante tipo dulce gota'
-                            ' (1 gota equivale a una cdta de azúcar blanca). \n'
-                            'Tomar 2 lts diarios de agua. \n',
+                        'Ensure Protein: 2 cdts diarias espolvoreadas o en bebida. \n',
+                            //'Cambiar azúcar blanca por edulcorante tipo dulce gota'
+                            //' (1 gota equivale a una cdta de azúcar blanca). \n'
+                            //'Tomar 2 lts diarios de agua. \n',
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           height: 1.8,

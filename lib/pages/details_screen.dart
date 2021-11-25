@@ -73,11 +73,11 @@ Widget _createCard1(){
 
 
   final List<SalesData> charData = [
-    /*SalesData('2021-09-13', 64),
+    SalesData('2021-09-13', 64),
     SalesData('2021-10-15', 54),
     SalesData('2021-11-17', 44),
-    SalesData('2021-11-21', 34),*/
-    SalesData('2021-09-11', 70),
+    SalesData('2021-11-21', 34),
+    //SalesData('2021-09-11', 70),
     /*SalesData('May', null),
     SalesData('Jun', null),
     SalesData('Jul', null),
@@ -126,14 +126,14 @@ Widget _createCard1(){
                   isVisible: false,
                     plotBands: <PlotBand>[
                       PlotBand(
-                          start: 44,
-                          end: 44,
+                          start: 43,
+                          end: 43,
                           borderColor: Colors.red,
                           borderWidth: 2
                       ),
                       PlotBand(
-                          start: 34,
-                          end: 34,
+                          start: 40,
+                          end: 40,
                           borderColor: Colors.green,
                           borderWidth: 2
                       ),

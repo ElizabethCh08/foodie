@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 class EquivalencesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final List<String> lacteos =['1 taza de leche o yogurt', '2 cucharadas de leche en polvo' ];
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -46,16 +47,16 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-              '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 0, right: 45),
+            child: Container(
+              child: Text(
+                '1 taza de leche o yogurt \n'
+                    '2 cucharadas de leche en polvo \n',
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -76,16 +77,21 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-                  '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 40, right: 5),
+            child: Container(
+              child: Container(
+                child: Text(
+                '1/2 taza de arroz, fideo \n'
+                    '1/2 taza de pure de papa, 1 papa mediana \n'
+                    '1/2 pan, 2 tostadas, 1 rebanada de pan \n'
+                    '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n'
+                    '6 galletas pequeñas, 2 galletas grandes \n',
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
+                ),
               ),
             ),
           ),
@@ -106,16 +112,20 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-                  '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 72, right: 15),
+            child: Container(
+              child: Text(
+                '1 onza de pollo, 1 onza de carne o 1 onza de pescado \n'
+                    '1 pedazo de queso (del tamaño de una caja de fósforos) \n'
+                    '1/2 taza de atún \n'
+                    '1 huevo de pollo \n'
+                    '1 rodaja de jamon \n'
+                    '5 conchas.',
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -136,16 +146,20 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-                  '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Container(
+              child: Text(
+                '1 cdta de aceite o 1 cdta de mayonesa \n'
+                    '1/8 de aguacate \n'
+                    '1/4 taza de semillas \n'
+                    '10 aceitunas \n'
+                    '1 cdta de margarina \n'
+                    '1 lonja de tocino \n'
+                    '1 cdta de aceite de oliva \n',
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -166,16 +180,15 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-                  '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 0, right: 45),
+            child: Container(
+              child: Text(
+                '1/2 taza de verduras cocidas \n'
+                    '1 taza de verduras crudas \n',
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -196,16 +209,17 @@ class EquivalencesScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Text(
-              '1/2 taza de arroz, fideo \n'
-                  '1/2 taza de pure de papa, 1 papa mediana\n'
-                  '1/2 pan, 2 tostadas, 1 rebanada de pan  \n'
-                  '1/2 maduro, 1/2 yuca, 1/2 zanahoria amarilla \n',
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                height: 1.8,
-                fontSize: 14,
+            padding: EdgeInsets.only(left: 0, right: 100),
+            child: Container(
+              child: Text(
+                '1 fruta fresca mediana \n'
+                    '1 taza de fruta picada \n'
+                    '1 de jugo diluido \n'
+                    '1/2 vaso de jugo puro \n',
+                style: TextStyle(
+                  height: 1.8,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),

@@ -1,12 +1,20 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_diet2/model/afternoonSValues.dart';
 import 'package:flutter_diet2/model/bodyfat.dart';
+import 'package:flutter_diet2/model/breakfastValues.dart';
+import 'package:flutter_diet2/model/dinnerValues.dart';
 import 'package:flutter_diet2/model/imc.dart';
+import 'package:flutter_diet2/model/lunchValues.dart';
 import 'package:flutter_diet2/model/mass.dart';
+import 'package:flutter_diet2/model/morningSValues.dart';
+import 'package:flutter_diet2/model/orders.dart';
 import 'package:flutter_diet2/model/user.dart';
 import 'package:flutter_diet2/model/visceralfat.dart';
 import 'package:flutter_diet2/model/waist.dart';
 import 'package:flutter_diet2/model/weight.dart';
+import 'package:flutter_diet2/model/menu.dart';
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
@@ -34,11 +42,21 @@ class UserSheetsApi {
   static Worksheet? _userSheetBodyfat;
   static Worksheet? _userSheetVisceralfat;
   static Worksheet? _userSheetImc;
+  static Worksheet? _userBreakfast;
+  static Worksheet? _userMorningSnack;
+  static Worksheet? _userLunch;
+  static Worksheet? _userAfternoonSnack;
+  static Worksheet? _userDinner; 
+
+  static Worksheet? _menu;
+
+  static Worksheet? _userOrders;
 
   static Future init() async {
     try {
       final spreadsheet = await _gsheets.spreadsheet(_spreadsheetId);
       _userSheet = await _getWorkSheet(spreadsheet, title: 'Users');
+
       _userSheetWeight = await _getWorkSheet(spreadsheet, title: 'Weight');
       _userSheetWaist = await _getWorkSheet(spreadsheet, title: 'WaistCircumference');
       _userSheetMass = await _getWorkSheet(spreadsheet, title: 'MuscularMass');
@@ -46,9 +64,18 @@ class UserSheetsApi {
       _userSheetVisceralfat = await _getWorkSheet(spreadsheet, title: 'Visceralfat');
       _userSheetImc = await _getWorkSheet(spreadsheet, title: 'IMC');
 
+      _userBreakfast = await _getWorkSheet(spreadsheet, title: 'Breakfast');
+      _userMorningSnack = await _getWorkSheet(spreadsheet, title: 'MorningSnack');
+      _userLunch = await _getWorkSheet(spreadsheet, title: 'Lunch');
+      _userAfternoonSnack = await _getWorkSheet(spreadsheet, title: 'AfternoonSnack');
+      _userDinner = await _getWorkSheet(spreadsheet, title: 'Dinner');
 
-      final firstRow = UserFields.getFields();
-      _userSheet!.values.insertRow(1, firstRow);
+      _menu =  await _getWorkSheet(spreadsheet, title: 'Menu');
+
+      _userOrders = await _getWorkSheet(spreadsheet, title: 'Orders');
+
+      final firstRow = OrdersFields.getFields();
+      _userOrders!.values.insertRow(1, firstRow);
     } catch (e) {
       print('Error: $e');
     }
@@ -225,11 +252,15 @@ class UserSheetsApi {
   static Future<Visceralfat?> getVisceralfatById(String id)async{
     if(_userSheetVisceralfat == null) return null;
 
-    final json = await _userSheetVisceralfat!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Visceralfat.fromJson(json);
+    //final json = await _userSheetVisceralfat!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Visceralfat.fromJson(json);
+    final visceralfats = await _userSheetVisceralfat!.values.map.allRows();
+    final userVisceralfats = visceralfats == null ? <Visceralfat>[]: visceralfats.map(Visceralfat.fromJson).where((i) => i.email==id).toList();
+    userVisceralfats.sort((a,b) => a.compareDates(b));
+    return userVisceralfats[0] == null ? null : userVisceralfats[0];
   }
 
-  //IMC
+  //IMC Spreadsheet
 
   static Future<int> getRowCountImc() async{
     if(_userSheetImc == null) return 0;
@@ -248,14 +279,170 @@ class UserSheetsApi {
   static Future<Imc?> getImcById(String id)async{
     if(_userSheetImc == null) return null;
 
-    final json = await _userSheetImc!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Imc.fromJson(json);
+    //final json = await _userSheetImc!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Imc.fromJson(json);
+    final imcs = await _userSheetImc!.values.map.allRows();
+    final userImcs = imcs == null ? <Imc>[]: imcs.map(Imc.fromJson).where((i) => i.email==id).toList();
+    userImcs.sort((a,b) => a.compareDates(b));
+    return userImcs[0] == null ? null : userImcs[0];
   }
 
+  //USER BREAKFAST VALUES
+
+  static Future<int> getRowCountBreakfastValues() async{
+    if(_userBreakfast == null) return 0;
+
+    final lastRow = await _userBreakfast!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Breakfast>> getAllBreakfastValues() async{
+    if(_userBreakfast == null) return <Breakfast>[];
+
+    final breakfastValues = await _userBreakfast!.values.map.allRows();
+    return breakfastValues == null ? <Breakfast>[] : breakfastValues.map(Breakfast.fromJson).toList();
+  }
+  
+  static Future<Breakfast?> getBreakfastById(String id) async{
+    if(_userBreakfast == null) return null;
+
+    final breakfastValues = await _userBreakfast!.values.map.allRows();
+    final userBValues = breakfastValues == null ? <Breakfast>[] : breakfastValues.map(Breakfast.fromJson).where((i) => i.email==id).toList();
+    return userBValues[0] == null ? null : userBValues[0];
+  }
+  
+  static Future<List<Breakfast>> getAllUserBreakfastValues (String id) async{
+    if(_userBreakfast == null) return <Breakfast>[];
+
+    final breakfastValues = await _userBreakfast!.values.map.allRows();
+    return breakfastValues == null ? <Breakfast>[] : breakfastValues.map(Breakfast.fromJson).where((i) => i.email==id).toList();
+  }
+  
+  //USER MORNING SNACK VALUES
+
+  static Future<int> getRowCountMorningSValues() async{
+    if(_userMorningSnack == null) return 0;
+
+    final lastRow = await _userMorningSnack!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+  
+  static Future<List<MorningS>> getAllMorningSValues() async{
+    if(_userMorningSnack == null) return <MorningS>[];
+
+    final morningSValues = await _userMorningSnack!.values.map.allRows();
+    return morningSValues == null ? <MorningS>[] : morningSValues.map(MorningS.fromJson).toList();
+  }
+  
+  static Future<MorningS?> getMorningSById(String id) async{
+    if(_userMorningSnack == null) return null;
+
+    final morningSValues = await _userMorningSnack!.values.map.allRows();
+    final userMValues = morningSValues == null ? <MorningS>[] : morningSValues.map(MorningS.fromJson).where((i) => i.email==id).toList();
+    return userMValues[0] == null ? null : userMValues[0];
+  }
+  
+  //USER LUNCH VALUES
+  static Future<int> getRowCountLunchValues() async{
+    if(_userLunch == null) return 0;
+
+    final lastRow = await _userLunch!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+  
+  static Future<List<Lunch>> getAllLunchValues() async{
+    if(_userLunch == null) return <Lunch>[];
+
+    final lunchValues = await _userLunch!.values.map.allRows();
+    return lunchValues == null ? <Lunch>[] : lunchValues.map(Lunch.fromJson).toList();
+
+  }
+  
+  static Future<Lunch?> getLunchById(String id) async{
+    if (_userLunch == null) return null;
+
+    final lunchValues = await _userLunch!.values.map.allRows();
+    final userLValues = lunchValues == null ? <Lunch>[] : lunchValues.map(Lunch.fromJson).where((i) => i.email==id).toList();
+    return userLValues[0] == null ? null : userLValues[0];
+  }
+  
+  //USER AFTERNOON SNACK VALUES
+  static Future<int> getRowCountAfternoonSValues() async{
+    if(_userAfternoonSnack == null) return 0;
+
+    final lastRow = await _userAfternoonSnack!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+  
+  static Future<List<AfternoonS>> getAllAfternoonSValues() async{
+    if(_userAfternoonSnack == null) return <AfternoonS>[];
+
+    final afternoonSValues = await _userAfternoonSnack!.values.map.allRows();
+    return afternoonSValues == null ? <AfternoonS>[] : afternoonSValues.map(AfternoonS.fromJson).toList();
+  }
+  
+  static Future<AfternoonS?> getAfternoonSById(String id) async{
+    if(_userAfternoonSnack == null) return null;
+
+    final afternoonSValues = await _userAfternoonSnack!.values.map.allRows();
+    final userAValues = afternoonSValues == null ? <AfternoonS>[] : afternoonSValues.map(AfternoonS.fromJson).where((i) => i.email==id).toList();
+    return userAValues[0] == null ? null : userAValues[0];
+  }
+
+  //USER DINNER VALUES
+  static Future<int> getRowCountDinnerValues() async{
+    if(_userDinner == null) return 0;
+
+    final lastRow = await _userDinner!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+  
+  static Future<List<Dinner>> getAllDinnerValues() async{
+    if(_userDinner == null) return <Dinner>[];
+
+    final dinnerValues = await _userDinner!.values.map.allRows();
+    return dinnerValues == null ? <Dinner>[] : dinnerValues.map(Dinner.fromJson).toList();
+  }
+  
+  static Future<Dinner?> getDinnerById(String id) async{
+    if(_userDinner == null) return null;
+
+    final dinnerValues = await _userDinner!.values.map.allRows();
+    final userDValues = dinnerValues == null ? <Dinner>[] : dinnerValues.map(Dinner.fromJson).where((i) => i.email==id).toList();
+    return userDValues[0] == null ? null : userDValues[0];
+  }
+  
+  //MENU
+  static Future<int> getRowMorningMenu() async{
+    if(_menu == null) return 0;
+
+    final lastRow = await _menu!.values.lastRow();
+    return lastRow == null ? 0 : int.tryParse(lastRow.first) ?? 0;
+  }
+
+  static Future<List<Menu>> getAllMorningMenu() async{
+    if(_menu == null) return <Menu>[];
+
+    final mms = await _menu!.values.map.allRows();
+    return mms == null ? <Menu>[] : mms.map(Menu.fromJson).toList();
+  }
+
+  static Future<Menu?> getMorningMenuById(int id)async{
+    if(_menu == null) return null;
+
+    final mms = await _menu!.values.map.allRows();
+    final userMms = mms == null ? <Menu>[]: mms.map(Menu.fromJson).where((i) => i.code ==id).toList();
+    userMms.sort((a,b) => a.compareDates(b));
+    return userMms[0] == null ? null : userMms[0];
+  }
+
+  
+
+  //INSERT ORDERS
 
   static Future insert(List<Map<String, dynamic>> rowList) async {
-    if (_userSheet == null) return;
+    if (_userOrders == null) return;
 
-    _userSheet!.values.map.appendRows(rowList);
+    _userOrders!.values.map.appendRows(rowList);
   }
 }
