@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_diet2/api/user_sheets_api.dart';
 import 'package:flutter_diet2/model/bodyfat.dart';
@@ -63,7 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     final grasaRecuperado = await UserSheetsApi.getBodyfatById(userStr.email);
                     final visceralRecuperado = await UserSheetsApi.getVisceralfatById(userStr.email);
                     final imcRecuperado = await UserSheetsApi.getImcById(userStr.email);
-                    print (encontrado);
+                    final userWeights = await UserSheetsApi.getAllUserWeights(userStr.email);
+                    print(userWeights);
+                   
                     if(encontrado?.password == userStr.password){
                       setState(() {
                         this.user = encontrado;
@@ -72,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         this.mass = masaRecuperado;
                         this.bodyfat = grasaRecuperado;
                         this.visceralfat = visceralRecuperado;
-                        this.imc = imcRecuperado;
+                        this.imc = imcRecuperado; 
                       });
                       print ("entro bien");
                       //llamarPantallaInicio;
@@ -87,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
                        imc: imcRecuperado,
                        )),
                    );
-                   print(pesoRecuperado);
                     }else{
                       print ("no debe entrar");
                       setState(() {
@@ -104,3 +107,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+

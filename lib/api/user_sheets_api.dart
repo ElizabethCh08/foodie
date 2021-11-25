@@ -108,8 +108,19 @@ class UserSheetsApi {
   static Future<Weight?> getWeightById(String id) async {
     if (_userSheetWeight == null) return null;
 
-    final json = await _userSheetWeight!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Weight.fromJson(json);
+    //final json = await _userSheetWeight!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Weight.fromJson(json);
+     final weights = await _userSheetWeight!.values.map.allRows();
+     final userWeights = weights == null ? <Weight>[]: weights.map(Weight.fromJson).where((i) => i.email==id).toList();
+     userWeights.sort((a,b) => a.compareDates(b));
+     return userWeights[0] == null ? null : userWeights[0] ;
+  }
+
+  static Future<List<Weight>> getAllUserWeights(String id) async{
+    if(_userSheetWeight == null) return <Weight>[];
+
+    final weights = await _userSheetWeight!.values.map.allRows();
+    return weights == null ? <Weight>[]: weights.map(Weight.fromJson).where((i) => i.email==id).toList();
   }
 
   //Waist spreadsheet
@@ -131,8 +142,12 @@ class UserSheetsApi {
   static Future<Waist?> getWaistById(String id) async {
     if (_userSheetWaist == null) return null;
 
-    final json = await _userSheetWaist!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Waist.fromJson(json);
+    //final json = await _userSheetWaist!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Waist.fromJson(json);
+    final waists = await _userSheetWaist!.values.map.allRows();
+    final userWaist = waists == null ? <Waist>[] : waists.map(Waist.fromJson).where((i) => i.email==id).toList();
+    userWaist.sort((a,b) => a.compareDates(b));
+    return userWaist[0] == null ? null : userWaist[0];
   }
 
   // Mass spreadsheet
@@ -155,8 +170,13 @@ class UserSheetsApi {
   static Future<Mass?> getMassById(String id) async{
     if (_userSheetMass == null) return null;
 
-    final json = await _userSheetMass!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Mass.fromJson(json);
+    //final json = await _userSheetMass!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Mass.fromJson(json);
+    final masses = await _userSheetMass!.values.map.allRows();
+    final userMasses = masses == null ? <Mass>[]: masses.map(Mass.fromJson).where((i) => i.email==id).toList();
+    userMasses.sort((a,b) => a.compareDates(b));
+    return userMasses[0] == null ? null : userMasses[0];
+
   }
 
   // Body_fat Spreadsheet
@@ -178,8 +198,12 @@ class UserSheetsApi {
   static Future<Bodyfat?> getBodyfatById(String id) async{
     if(_userSheetBodyfat == null) return null;
 
-    final json = await _userSheetBodyfat!.values.map.rowByKey(id, fromColumn: 1);
-    return json == null ? null : Bodyfat.fromJson(json);
+    //final json = await _userSheetBodyfat!.values.map.rowByKey(id, fromColumn: 1);
+    //return json == null ? null : Bodyfat.fromJson(json);
+    final bodies = await _userSheetBodyfat!.values.map.allRows();
+    final userBodies = bodies == null ? <Bodyfat>[]: bodies.map(Bodyfat.fromJson).where((i) => i.email==id).toList();
+    userBodies.sort((a,b) => a.compareDates(b));
+    return userBodies[0] == null ? null : userBodies[0];
   }
 
   // Visceral_fat Spreadsheet

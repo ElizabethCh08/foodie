@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_diet2/api/user_sheets_api.dart';
 import 'package:flutter_diet2/model/bodyfat.dart';
 import 'package:flutter_diet2/model/imc.dart';
 import 'package:flutter_diet2/model/mass.dart';
@@ -17,8 +15,6 @@ import 'nutritional_screen.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:group_button/group_button.dart';
 
-
-
 class HomeScreensw extends StatelessWidget {
   final User? user;
   final Weight? peso;
@@ -27,18 +23,17 @@ class HomeScreensw extends StatelessWidget {
   final Bodyfat? grasaCorporal;
   final Visceralfat? grasaVisceral;
   final Imc? imc;
-      
 
   HomeScreensw({
-    Key? key, 
-    required this.user, 
-    required this.peso, 
-    required this.cintura, 
+    Key? key,
+    required this.user,
+    required this.peso,
+    required this.cintura,
     required this.masa,
     required this.grasaCorporal,
     required this.grasaVisceral,
     required this.imc,
-    }) : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +41,131 @@ class HomeScreensw extends StatelessWidget {
     final widht = MediaQuery.of(context).size.width;
     final today = DateTime.now();
     final name = user == null ? '' : user!.name;
+    //Weight
     final weight = peso == null ? '' : peso!.value;
+    final lowerRangeWeight = peso == null ? '' : peso!.lowerRange;
+    final topRangeWeight = peso == null ? '' : peso!.topRange;
+    //Waist
     final waist = cintura == null ? '' : cintura!.value;
+    final lowerRangeWaist = cintura == null ? '' : cintura!.lowerRange;
+    final topRangeWaist = cintura == null ? '' : cintura!.topRange;
+    //Mass
     final mass = masa == null ? '' : masa!.value;
+    final lowerRangeMass = masa == null ? '' : masa!.lowerRange;
+    final topRangeMass = masa == null ? '' : masa!.topRange;
+    //Body fat
     final bFat = grasaCorporal == null ? '' : grasaCorporal!.value;
+    final lowerRangeBfat =
+        grasaCorporal == null ? '' : grasaCorporal!.lowerRange;
+    final topRangeBfat = grasaCorporal == null ? '' : grasaCorporal!.topRange;
+    //Visceral fat
     final vFat = grasaVisceral == null ? '' : grasaVisceral!.value;
+    final lowerRangevfat =
+        grasaVisceral == null ? '' : grasaVisceral!.lowerRange;
+    final topRangevfat = grasaVisceral == null ? '' : grasaVisceral!.topRange;
+    //IMC
     final bmi = imc == null ? '' : imc!.value;
-    
+    final lowerRangeBmi = imc == null ? '' : imc!.lowerRange;
+    final topRangeBmi = imc == null ? '' : imc!.topRange;
+
+    progressColorWeight() {
+      weight as int;
+      lowerRangeWeight as int;
+      topRangeWeight as int;
+      double amarilloLower = lowerRangeWeight + lowerRangeWeight * 0.10;
+      double amarilloTop = topRangeWeight + topRangeWeight * 0.10;
+      print(weight);
+      print(amarilloLower);
+      print(amarilloTop);
+
+      if (weight >= lowerRangeWeight && weight <= topRangeWeight) {
+        return Color(0xFF5FD000);
+      } else if (weight < amarilloLower && weight > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
+
+    progressColorWaist() {
+      waist as int;
+      lowerRangeWaist as int;
+      topRangeWaist as int;
+      double amarilloLower = lowerRangeWaist + lowerRangeWaist * 0.10;
+      double amarilloTop = topRangeWaist + topRangeWaist * 0.10;
+
+      if (waist >= lowerRangeWaist && waist <= topRangeWaist) {
+        return Color(0xFF5FD000);
+      } else if (waist < amarilloLower && waist > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
+
+    progressColorMass(){
+      mass as int;
+      lowerRangeMass as int;
+      topRangeMass as int;
+      double amarilloLower = lowerRangeMass + lowerRangeMass *0.10;
+      double amarilloTop = topRangeMass + topRangeMass *0.10;
+
+      if (mass >= lowerRangeMass && mass <= topRangeMass) {
+        return Color(0xFF5FD000);
+      } else if (mass < amarilloLower && mass > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
+
+    progressColorBfat(){
+      bFat as int;
+      lowerRangeBfat as int;
+      topRangeBfat as int;
+      double amarilloLower = lowerRangeBfat + lowerRangeBfat *0.10;
+      double amarilloTop = topRangeBfat + topRangeBfat *0.10;
+
+      if (bFat >= lowerRangeBfat && bFat <= topRangeBfat) {
+        return Color(0xFF5FD000);
+      } else if (bFat < amarilloLower && bFat > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
+
+    progressColorVfat(){
+      vFat as int;
+      lowerRangevfat as int;
+      topRangevfat as int;
+      double amarilloLower = lowerRangevfat + lowerRangevfat *0.10;
+      double amarilloTop = topRangevfat + topRangevfat *0.10;
+
+      if (vFat >= lowerRangevfat && vFat <= topRangevfat) {
+        return Color(0xFF5FD000);
+      } else if (vFat < amarilloLower && vFat > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
+
+    progressColorBmi(){
+      bmi as int;
+      lowerRangeBmi as int;
+      topRangeBmi as int;
+      double amarilloLower = lowerRangeBmi + lowerRangeBmi *0.10;
+      double amarilloTop = topRangeBmi + topRangeBmi *0.10;
+
+      if (bmi >= lowerRangeBmi && bmi <= topRangeBmi) {
+        return Color(0xFF5FD000);
+      } else if (bmi < amarilloLower && bmi > amarilloTop) {
+        return Color(0xFFFDE400);
+      } else {
+        return Color(0xFFFD3000);
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -114,8 +227,7 @@ class HomeScreensw extends StatelessWidget {
               ),
               child: Container(
                 color: Color(0xFFFFFFFF),
-                padding: const EdgeInsets.only(
-                    top: 50, left: 16,  bottom: 0),
+                padding: const EdgeInsets.only(top: 50, left: 16, bottom: 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -129,7 +241,7 @@ class HomeScreensw extends StatelessWidget {
                     ),
                     ListTile(
                       title: Text(
-                        "Martes, 14 Septiembre",
+                        "Jueves, 23 Septiembre",
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 18,
@@ -156,9 +268,9 @@ class HomeScreensw extends StatelessWidget {
                             _Progress(
                               ingredient: "Peso",
                               leftAmount: '$weight kg',
-                              progress: 0.5,
-                              progressColor: Color(0xFFFD3000),
-                              width: widht * 0.30,
+                              progress: 0.1,
+                              progressColor: progressColorWeight(),
+                              width: widht * 0.3,
                             ),
                             SizedBox(
                               height: 10,
@@ -167,17 +279,17 @@ class HomeScreensw extends StatelessWidget {
                               ingredient: "M. muscular",
                               leftAmount: '$mass %',
                               progress: 0.2,
-                              progressColor: Color(0xFF5FD000),
-                              width: widht * 0.30,
+                              progressColor: progressColorMass(),
+                              width: widht * 0.3,
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             _Progress(
-                              ingredient: "IMC",
-                              leftAmount: '$bmi',
-                              progress: 0.4,
-                              progressColor: Color(0xFFFDE400),
+                              ingredient: "Grasa v.",
+                              leftAmount: '$vFat     ',
+                              progress: 0.8,
+                              progressColor: progressColorVfat(),
                               width: widht * 0.30,
                             ),
                             SizedBox(
@@ -185,18 +297,23 @@ class HomeScreensw extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
+                            _Progress(
+                              ingredient: "IMC",
+                              leftAmount: '$bmi     ',
+                              progress: 0.4,
+                              progressColor: progressColorBmi(),
+                              width: widht * 0.3,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             _Progress(
                               ingredient: "Grasa c.",
                               leftAmount: '$bFat %',
                               progress: 0.1,
-                              progressColor: Color(0xFFFD3000),
+                              progressColor: progressColorBfat(),
                               width: widht * 0.30,
                             ),
                             SizedBox(
@@ -206,17 +323,7 @@ class HomeScreensw extends StatelessWidget {
                               ingredient: "Abdomen",
                               leftAmount: '$waist cm',
                               progress: 0.6,
-                              progressColor: Color(0xFFFD3000),
-                              width: widht * 0.30,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            _Progress(
-                              ingredient: "Grasa v.",
-                              leftAmount: '$vFat',
-                              progress: 0.8,
-                              progressColor: Color(0xFF5FD000),
+                              progressColor: progressColorWaist(),
                               width: widht * 0.30,
                             ),
                             SizedBox(
@@ -595,23 +702,25 @@ class _Progress extends StatelessWidget {
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: Colors.black12,
+                    color: progressColor,
                   ),
                 ),
-                Container(
+                /*Container(
                   height: 10,
-                  width: width * progress,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: progressColor,
                   ),
-                ),
+                ),*/
               ],
             ),
             SizedBox(
-              width: 10,
+              width: 5,
             ),
             Text("$leftAmount"),
+            SizedBox(
+              width: 10,
+            )
           ],
         ),
       ],
